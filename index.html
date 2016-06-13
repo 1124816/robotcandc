@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+  </head>
+  <body>
+
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      var socket = io();
+
+      var up = true;
+      var down = true;
+      var left = true;
+      var right = true;
+
+    window.addEventListener('keydown', function (e) {
+
+      var key = e.keyCode ? e.keyCode : e.which;
+      
+      if (key == 37 && left) {
+        socket.emit('message', { message: '1'});
+        console.log("message sent: left");
+        left = false;
+      }else if (key == 38 && up) {
+        socket.emit('message', { message: '3'}); 
+        console.log("message sent: up");
+        up = false;
+      }else if (key == 39 && right) {
+        socket.emit('message', { message: '2'}); 
+        console.log("message sent: right");
+        right = false;
+      }else if (key == 40 && down) {
+        socket.emit('message', { message: '0'});
+        console.log("message sent: down");
+        down = false;
+      }
+
+    }, false);
+
+    window.addEventListener('keyup', function (e) {
+    
+      var key = e.keyCode ? e.keyCode : e.which;
+     
+      if (key == 37) {
+        left = true;
+      }else if (key == 38) {
+        up = true;
+      }else if (key == 39) {
+        right = true;
+      }else if (key == 40) {
+        down = true;
+      }
+    
+    }, false);
+
+
+    var BaseURL = prompt("Host?", "http://192.168.1._:8080");
+    var DisplayWidth = "640";
+    var DisplayHeight = "480";
+    var stoopit_File = "/video";
+    var output = "";
+    if ((navigator.appName == "Microsoft Internet Explorer")&&(navigator.platform != "MacPPC")&&(navigator.platform != "Mac68k")) { 
+      // If Internet Explorer for Windows then use ActiveX 
+      output =  "<OBJECT ID=\"CamImage\" WIDTH="
+      output += DisplayWidth;
+      output += " HEIGHT=";
+      output += DisplayHeight;
+      output += " CLASSID=CLSID:917623D1-D8E5-11D2-BE8B-00104B06BDE3 ";
+      output += "CODEBASE=\"";
+      output += BaseURL;
+      output += "activex/AxisCamControl.ocx#Version=1,0,1,34\">";
+      output += "<PARAM NAME=\"URL\" VALUE=\"";
+      output += BaseURL;
+      output += stoopit_File;
+      output += "\"> <BR><B>Axis ActiveX Camera Control</B><BR>";
+      output += "The AXIS ActiveX Camera Control, which enables you ";
+      output += "to view live image streams in Microsoft Internet";
+      output += " Explorer, could not be registered on your computer.";
+      output += "<BR></OBJECT>"; 
+    } else {
+      // If not IE for Windows use the browser itself to display
+      output = "<IMG SRC=\"";
+      output += BaseURL;
+      output += stoopit_File;
+      output += "?dummy=garb\" HEIGHT=\"";
+      output += DisplayHeight;
+      output += "\" WIDTH=\"";
+      output += DisplayWidth;
+      output += "\" ALT=\"Moving Image Stream\">";  
+    } 
+
+    document.write(output);
+
+    </script>
+
+  </body>
+</html>
